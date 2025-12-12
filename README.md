@@ -24,6 +24,13 @@ Explora las siguientes páginas:
 - **Favoritos**: Tu colección personal
 - **Detalles**: Información completa con resumen AI
 
+### 🔗 Enlaces del Proyecto
+
+| Tipo de Enlace | URL |
+| :--- | :--- |
+| **Dominio Principal** | [nuxt-app-nine-amber.vercel.app](https://nuxt-app-nine-amber.vercel.app) |
+| **Deployment Preview** | [nuxt-nwz7i1pgs-mois-projects-f974e75b.vercel.app](https://nuxt-nwz7i1pgs-mois-projects-f974e75b.vercel.app) |
+
 ## 🛠️ Tecnologías
 
 - **[Nuxt 4](https://nuxt.com/)** - Framework Vue.js para aplicaciones web
