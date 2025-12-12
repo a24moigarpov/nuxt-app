@@ -13,20 +13,16 @@
       {{ error }}
     </div>
 
-    <div v-else-if="movies.length > 0" class="movies-section">
+    <div v-else-if="movies.length" class="movies-section">
       <div class="movie-grid">
-        <ItemCard 
-          v-for="movie in movies" 
-          :key="movie.imdbID" 
-          :item="movie"
-        >
+        <ItemCard v-for="movie in movies" :key="movie.imdbID" :item="movie">
           <template #actions="{ item }">
             <button 
-              @click="handleAddToFavorites(item)"
+              @click="store.addFavorite(item)"
               :disabled="store.isFavorite(item.imdbID)"
               class="favorite-btn"
             >
-              {{ store.isFavorite(item.imdbID) ? '✓ En favoritos' : '♡ Añadir a favoritos' }}
+              {{ store.isFavorite(item.imdbID) ? '✓ En favoritos' : '♡ Añadir' }}
             </button>
           </template>
         </ItemCard>
@@ -44,8 +40,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useApi } from '../composables/useApi'
-import ItemCard from '../components/ItemCard.vue'
-import { useFavoritesStore } from '../stores/favoritesStore.js'
+import { useFavoritesStore } from '../stores/favoritesStore'
 
 const store = useFavoritesStore()
 const api = useApi()
@@ -53,30 +48,19 @@ const movies = ref([])
 const loading = ref(true)
 const error = ref(null)
 
-// Lista de películas populares para buscar
 const popularSearches = ['Avengers', 'Batman', 'Star Wars', 'Matrix', 'Inception']
 
 onMounted(async () => {
   try {
-    // Buscar una película popular aleatoria
     const randomSearch = popularSearches[Math.floor(Math.random() * popularSearches.length)]
-    
     const data = await api.searchMovies(randomSearch)
-
-    if (data.Response === 'True') {
-      movies.value = data.Search.slice(0, 6) // Mostrar solo 6 películas
-    }
+    if (data.Response === 'True') movies.value = data.Search.slice(0, 6)
   } catch (err) {
-    console.error('Error loading popular movies:', err)
     error.value = 'Error cargando películas populares'
   } finally {
     loading.value = false
   }
 })
-
-function handleAddToFavorites(movie) {
-  store.addFavorite(movie)
-}
 </script>
 
 <style scoped>

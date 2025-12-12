@@ -11,9 +11,6 @@
         <p>{{ item.Year }}</p>
       </div>
     </router-link>
-    
-    <!-- SLOT: Espacio para acciones personalizadas (botones, etc.) -->
-    <!-- El componente padre puede llenar este espacio con lo que necesite -->
     <div class="item-actions">
       <slot name="actions" :item="item"></slot>
     </div>
@@ -21,17 +18,12 @@
 </template>
 
 <script setup>
-// PROPS: Datos que recibe el componente
-// El componente es reutilizable y solo necesita el item
 defineProps({
   item: {
     type: Object,
     required: true
   }
 });
-
-// No necesitamos emits porque usamos slots para las acciones
-// El componente padre decide qué acciones mostrar mediante el slot
 </script>
 
 <style scoped>

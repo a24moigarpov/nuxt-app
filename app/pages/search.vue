@@ -5,66 +5,39 @@
       <p class="subtitle">Ingresa el título de una película</p>
     </div>
     
-    <!-- COMPONENTE HIJO: SearchBar emite el evento "search" al padre -->
-    <SearchBar 
-      v-model="query"
-      :loading="loading"
-      @search="handleSearch"
-    />
+    <SearchBar v-model="query" :loading="loading" @search="search" />
 
-    <div v-if="error" class="error-message">
-      {{ error }}
-    </div>
+    <div v-if="error" class="error-message">{{ error }}</div>
 
-    <div v-if="results && results.length > 0" class="results-container">
+    <div v-if="results?.length" class="results-container">
       <h2>Resultados ({{ results.length }})</h2>
       <div class="movie-grid">
-        <ItemCard 
-          v-for="movie in results" 
-          :key="movie.imdbID" 
-          :item="movie"
-        >
-          <!-- SLOT: Personalizamos las acciones para la página de búsqueda -->
+        <ItemCard v-for="movie in results" :key="movie.imdbID" :item="movie">
           <template #actions="{ item }">
             <button 
-              @click="handleAddToFavorites(item)"
+              @click="store.addFavorite(item)"
               :disabled="store.isFavorite(item.imdbID)"
               class="favorite-btn"
             >
-              {{ store.isFavorite(item.imdbID) ? '✓ En favoritos' : '♡ Añadir a favoritos' }}
+              {{ store.isFavorite(item.imdbID) ? '✓ En favoritos' : '♡ Añadir' }}
             </button>
           </template>
         </ItemCard>
       </div>
     </div>
     
-    <div v-else-if="results && results.length === 0" class="no-results">
-      No se encontraron películas. Intenta con otro término de búsqueda.
+    <div v-else-if="results?.length === 0" class="no-results">
+      No se encontraron películas.
     </div>
   </div>
 </template>
 
 <script setup>
 import { useSearch } from '../composables/useSearch'
-import ItemCard from '../components/ItemCard.vue'
-import SearchBar from '../components/SearchBar.vue'
-import { useFavoritesStore } from '../stores/favoritesStore.js'
+import { useFavoritesStore } from '../stores/favoritesStore'
 
-// COMPOSABLE: Utilitzem el composable useSearch per gestionar la lògica de cerca
 const { query, results, loading, error, search } = useSearch()
-
-// PINIA: Usar el store de favoritos
 const store = useFavoritesStore()
-
-// EVENTO: El componente padre maneja el evento "search" emitido por SearchBar
-async function handleSearch() {
-  await search()
-}
-
-// ACCIÓN: El padre decide qué hacer cuando se añade a favoritos
-function handleAddToFavorites(movie) {
-  store.addFavorite(movie)
-}
 </script>
 
 <style scoped>

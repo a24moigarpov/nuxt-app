@@ -3,41 +3,27 @@
     <input 
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
-      @keyup.enter="handleSearch"
+      @keyup.enter="$emit('search')"
       placeholder="Título de la película..."
       class="search-input"
     />
     <button 
-      @click="handleSearch"
+      @click="$emit('search')"
       class="search-button"
       :disabled="loading"
     >
-      <span v-if="!loading">Buscar</span>
-      <span v-else>Buscando...</span>
+      {{ loading ? 'Buscando...' : 'Buscar' }}
     </button>
   </div>
 </template>
 
 <script setup>
-// PROPS: Recibe el valor del v-model desde el padre
 defineProps({
-  modelValue: {
-    type: String,
-    default: ''
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  }
+  modelValue: String,
+  loading: Boolean
 });
 
-// EMITS: Define los eventos que puede emitir al componente padre
-const emit = defineEmits(['update:modelValue', 'search']);
-
-// FUNCIÓN: Emite el evento de búsqueda al padre
-function handleSearch() {
-  emit('search');
-}
+defineEmits(['update:modelValue', 'search']);
 </script>
 
 <style scoped>

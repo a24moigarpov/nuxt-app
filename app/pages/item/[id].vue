@@ -55,22 +55,21 @@
         <div class="action-buttons">
           <router-link to="/search" class="btn-back">Volver</router-link>
           <button 
-            @click="handleGenerateSummary" 
+            @click="generateSummary(movie)" 
             :disabled="summaryLoading"
             class="btn-summary"
           >
-            {{ summaryLoading ? 'Generando...' : '✨ Resum amb IA' }}
+            {{ summaryLoading ? 'Generando...' : '✨ Resumen IA' }}
           </button>
           <a :href="`https://www.imdb.com/title/${movie.imdbID}`" target="_blank" class="btn-imdb">
             Ver en IMDb
           </a>
         </div>
 
-        <!-- GEMINI AI SUMMARY -->
         <div v-if="aiSummary" class="ai-summary">
           <div class="summary-header">
             <h3>✨ Análisis generado por IA</h3>
-            <button @click="clearAiSummary" class="btn-close">✕</button>
+            <button @click="clearSummary" class="btn-close">✕</button>
           </div>
           <p class="summary-text">{{ aiSummary }}</p>
         </div>
@@ -94,24 +93,12 @@ const api = useApi()
 const movie = ref(null)
 const loading = ref(true)
 
-// COMPOSABLE: Gemini AI per generar resums
 const { summary: aiSummary, loading: summaryLoading, error: summaryError, generateSummary, clearSummary } = useGeminiSummary()
 
 onMounted(async () => {
-  // Utilitzem el composable useApi per obtenir els detalls de la pel·lícula
   movie.value = await api.getMovieById(route.params.id)
   loading.value = false
 })
-
-async function handleGenerateSummary() {
-  if (movie.value) {
-    await generateSummary(movie.value)
-  }
-}
-
-function clearAiSummary() {
-  clearSummary()
-}
 </script>
 
 <style scoped>

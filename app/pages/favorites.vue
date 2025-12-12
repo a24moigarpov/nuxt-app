@@ -2,54 +2,38 @@
   <div class="favorites-container">
     <div class="favorites-header">
       <h1>Mis Favoritos</h1>
-      <div class="counter" v-if="store.favoritesCount > 0">
+      <div v-if="store.favoritesCount" class="counter">
         {{ store.favoritesCount }} {{ store.favoritesCount === 1 ? 'película' : 'películas' }}
       </div>
     </div>
     
-    <div v-if="store.favorites.length === 0" class="no-favorites">
+    <div v-if="!store.favorites.length" class="no-favorites">
       <div class="empty-state">
         <span class="empty-icon">🎬</span>
         <h2>Aún no tienes favoritos</h2>
-        <p>Empieza a construir tu colección añadiendo películas que te gusten</p>
+        <p>Empieza a construir tu colección</p>
         <router-link to="/search" class="search-link">
-          <span>🔍</span>
-          Buscar películas
+          🔍 Buscar películas
         </router-link>
       </div>
     </div>
     
-    <div v-else>
-      <div class="favorites-grid">
-        <ItemCard 
-          v-for="movie in store.favorites" 
-          :key="movie.imdbID" 
-          :item="movie"
-        >
-          <template #actions="{ item }">
-            <button 
-              @click="handleRemoveFromFavorites(item.imdbID)"
-              class="remove-btn"
-            >
-              <span class="btn-icon">✕</span>
-              Quitar de favoritos
-            </button>
-          </template>
-        </ItemCard>
-      </div>
+    <div v-else class="favorites-grid">
+      <ItemCard v-for="movie in store.favorites" :key="movie.imdbID" :item="movie">
+        <template #actions="{ item }">
+          <button @click="store.removeFavorite(item.imdbID)" class="remove-btn">
+            ✕ Quitar
+          </button>
+        </template>
+      </ItemCard>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useFavoritesStore } from '../stores/favoritesStore.js'
-import ItemCard from '../components/ItemCard.vue'
+import { useFavoritesStore } from '../stores/favoritesStore'
 
 const store = useFavoritesStore()
-
-function handleRemoveFromFavorites(id) {
-  store.removeFavorite(id)
-}
 </script>
 
 <style scoped>
@@ -98,20 +82,11 @@ function handleRemoveFromFavorites(id) {
   font-size: 0.9rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
 }
 
 .remove-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(248, 81, 73, 0.4);
-}
-
-.btn-icon {
-  font-size: 1.2rem;
-  font-weight: 700;
 }
 
 .no-favorites {

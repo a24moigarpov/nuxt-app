@@ -80,11 +80,6 @@ const favoritesStore = useFavoritesStore()
 }
 
 .nav-link.active {
-  color: #ffffff;
-  border-bottom: 2px solid #58a6ff;
-}
-
-.nav-link.active {
   color: #f9c74f;
   border-bottom: 2px solid #f9c74f;
 }
