@@ -29,7 +29,6 @@ Explora las siguientes páginas:
 | Tipo de Enlace | URL |
 | :--- | :--- |
 | **Dominio Principal** | [nuxt-app-nine-amber.vercel.app](https://nuxt-app-nine-amber.vercel.app) |
-| **Deployment Preview** | [nuxt-nwz7i1pgs-mois-projects-f974e75b.vercel.app](https://nuxt-nwz7i1pgs-mois-projects-f974e75b.vercel.app) |
 
 ## 🛠️ Tecnologías
 
