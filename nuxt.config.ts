@@ -4,9 +4,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@pinia/nuxt'],
   runtimeConfig: {
+    // Variables privadas (solo servidor)
+    omdbApiKey: process.env.NUXT_OMDB_API_KEY,
+    geminiApiKey: process.env.NUXT_GEMINI_API_KEY,
     public: {
-      omdbApiKey: process.env.NUXT_PUBLIC_OMDB_API_KEY,
-      geminiApiKey: process.env.NUXT_PUBLIC_GEMINI_API_KEY
+      // Variables públicas (solo si es necesario exponer algo al cliente)
     }
   }
 })

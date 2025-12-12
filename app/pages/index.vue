@@ -38,28 +38,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useApi } from '../composables/useApi'
+import { onMounted } from 'vue'
+import { usePopularMovies } from '../composables/usePopularMovies'
 import { useFavoritesStore } from '../stores/favoritesStore'
 
 const store = useFavoritesStore()
-const api = useApi()
-const movies = ref([])
-const loading = ref(true)
-const error = ref(null)
+const { movies, loading, error, loadPopularMovies } = usePopularMovies()
 
-const popularSearches = ['Avengers', 'Batman', 'Star Wars', 'Matrix', 'Inception']
-
-onMounted(async () => {
-  try {
-    const randomSearch = popularSearches[Math.floor(Math.random() * popularSearches.length)]
-    const data = await api.searchMovies(randomSearch)
-    if (data.Response === 'True') movies.value = data.Search.slice(0, 6)
-  } catch (err) {
-    error.value = 'Error cargando películas populares'
-  } finally {
-    loading.value = false
-  }
+onMounted(() => {
+  loadPopularMovies(6)
 })
 </script>
 

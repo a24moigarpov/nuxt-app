@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 /**
  * Buscar películas por título
  * @param {string} query - El título a buscar
@@ -7,14 +5,10 @@ import axios from 'axios';
  */
 export async function searchApi(query) {
   try {
-    const config = useRuntimeConfig();
-    const response = await axios.get('https://www.omdbapi.com/', {
-      params: {
-        apikey: config.public.omdbApiKey,
-        s: query
-      }
+    const response = await $fetch('/api/omdb/search', {
+      params: { s: query }
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error('Error searching API:', error);
     throw error;
@@ -28,14 +22,8 @@ export async function searchApi(query) {
  */
 export async function getItemById(id) {
   try {
-    const config = useRuntimeConfig();
-    const response = await axios.get('https://www.omdbapi.com/', {
-      params: {
-        apikey: config.public.omdbApiKey,
-        i: id
-      }
-    });
-    return response.data;
+    const response = await $fetch(`/api/omdb/${id}`);
+    return response;
   } catch (error) {
     console.error('Error fetching item:', error);
     throw error;

@@ -4,6 +4,10 @@
       <p>Cargando...</p>
     </div>
 
+    <div v-else-if="error" class="error-message">
+      {{ error }}
+    </div>
+
     <div v-else-if="movie" class="movie-detail">
       <div class="movie-poster-section">
         <img 
@@ -59,7 +63,7 @@
             :disabled="summaryLoading"
             class="btn-summary"
           >
-            {{ summaryLoading ? 'Generando...' : '✨ Resumen IA' }}
+            {{ summaryLoading ? 'Generando...' : 'Resumen IA' }}
           </button>
           <a :href="`https://www.imdb.com/title/${movie.imdbID}`" target="_blank" class="btn-imdb">
             Ver en IMDb
@@ -68,7 +72,7 @@
 
         <div v-if="aiSummary" class="ai-summary">
           <div class="summary-header">
-            <h3>✨ Análisis generado por IA</h3>
+            <h3>Análisis generado por IA</h3>
             <button @click="clearSummary" class="btn-close">✕</button>
           </div>
           <p class="summary-text">{{ aiSummary }}</p>
@@ -83,21 +87,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useApi } from '../../composables/useApi'
+import { useMovieDetail } from '../../composables/useMovieDetail'
 import { useGeminiSummary } from '../../composables/useGeminiSummary'
 
 const route = useRoute()
-const api = useApi()
-const movie = ref(null)
-const loading = ref(true)
-
+const { movie, loading, error, loadMovie } = useMovieDetail()
 const { summary: aiSummary, loading: summaryLoading, error: summaryError, generateSummary, clearSummary } = useGeminiSummary()
 
-onMounted(async () => {
-  movie.value = await api.getMovieById(route.params.id)
-  loading.value = false
+onMounted(() => {
+  loadMovie(route.params.id)
 })
 </script>
 

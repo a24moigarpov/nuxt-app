@@ -1,14 +1,20 @@
-import axios from 'axios'
-
 export const useApi = () => {
-  const config = useRuntimeConfig()
-  
-  const getMovie = async (params) => {
+  const searchMovies = async (query) => {
     try {
-      const response = await axios.get('https://www.omdbapi.com/', {
-        params: { apikey: config.public.omdbApiKey, ...params }
+      const response = await $fetch('/api/omdb/search', {
+        params: { s: query }
       })
-      return response.data
+      return response
+    } catch (error) {
+      console.error('Error searching movies:', error)
+      throw error
+    }
+  }
+
+  const getMovieById = async (id) => {
+    try {
+      const response = await $fetch(`/api/omdb/${id}`)
+      return response
     } catch (error) {
       console.error('Error fetching movie:', error)
       throw error
@@ -16,7 +22,7 @@ export const useApi = () => {
   }
 
   return { 
-    searchMovies: (query) => getMovie({ s: query }),
-    getMovieById: (id) => getMovie({ i: id })
+    searchMovies,
+    getMovieById
   }
 }

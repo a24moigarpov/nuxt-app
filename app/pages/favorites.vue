@@ -9,11 +9,10 @@
     
     <div v-if="!store.favorites.length" class="no-favorites">
       <div class="empty-state">
-        <span class="empty-icon">🎬</span>
         <h2>Aún no tienes favoritos</h2>
         <p>Empieza a construir tu colección</p>
         <router-link to="/search" class="search-link">
-          🔍 Buscar películas
+          Buscar películas
         </router-link>
       </div>
     </div>
